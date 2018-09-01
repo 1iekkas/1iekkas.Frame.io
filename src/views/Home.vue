@@ -15,7 +15,7 @@
 
 <script>
 // @ is an alias to /src
-import Scroll from "@/base/scroll";
+import Scroll from "@/base/scroll/scroll";
 
 export default {
   name: "home",
