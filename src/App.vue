@@ -24,4 +24,8 @@
     color #2c3e50
     &.router-link-exact-active
       color #42b983
+ul
+  margin 0
+  padding 0
+  list-style none      
 </style>

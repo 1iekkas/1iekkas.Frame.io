@@ -39,6 +39,7 @@
       }
     },
     mounted() {
+        console.log(this.data)
       setTimeout(() => {
         this._initScroll()
       }, 20)
@@ -94,6 +95,7 @@
       data() {
         setTimeout(() => {
           this.refresh()
+            console.log(this.scroll)
         }, this.refreshDelay)
       }
     }
