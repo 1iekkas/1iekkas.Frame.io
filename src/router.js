@@ -1,6 +1,8 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
+import Recommend from "./components/recommend/recommend.vue";
+import Radioanchor from "./components/radioAnchor/radioAnchor.vue";
 
 Vue.use(Router);
 
@@ -8,8 +10,17 @@ export default new Router({
   routes: [
     {
       path: "/",
-      name: "home",
-      component: Home
+      redirect:'/recommend'
+    },
+    {
+      path: "/recommend",
+      name: "Recommend",
+      component: Recommend
+    },
+    {
+      path: "/radioanchor",
+      name: "Radioanchor",
+      component: Radioanchor
     },
     {
       path: "/about",

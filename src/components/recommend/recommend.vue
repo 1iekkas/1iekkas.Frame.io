@@ -1,0 +1,225 @@
+<template>
+    <scroll class="wrapper" 
+          :data="singleList"
+          :listen-scroll="listenScroll"
+          :probe-type="probeType"
+          :pullup="pullup"
+          :pulldown="pulldown"
+          ref="wrapper"
+          @scroll="scroll"
+          @scrollToEnd="scrollToEnd"
+          @reload="reload"
+    >
+      <div class="container">
+        <transition name="fade">
+          <div class="reload" v-show="isReload" >
+            <span v-if="!load">释放刷新</span>
+            <span v-else><img src="../../../src/base/loading/loading.gif" alt="" width="20"></span>
+          </div>
+        </transition>
+        <swiper :swiperList="swiperList"></swiper>
+        <sheet :title="sheetTitle" :data="sheet" @imgload="loadImage"></sheet> 
+        <sheet :title="newSongTitle" :data="newSong" @imgload="loadImage"></sheet>  
+        <sheet :title="anchorTitle" :data="anchor" @imgload="loadImage"></sheet> 
+        <single-list :data="singleList"></single-list>
+
+
+
+        <!-- <ul class="wrapper-list">
+          <li v-for="song in 10">
+            <div class="song-item">
+              <div class="img">
+              <img @load="loadImage" src="http://p1.music.126.net/tXCIFsVDK6IKcQ9YWxwOEg==/109951163523944497.jpg" alt="thumb">
+              </div>    
+            </div>     
+          </li>
+        </ul> -->
+
+      </div>
+    </scroll>
+
+</template>
+
+<script>
+// @ is an alias to /src
+import Scroll from "@/base/scroll/scroll" 
+import Swiper from "@/base/swiper/swiper"
+import Sheet from "@/components/recommend/sheet"
+import SingleList from "@/components/single-list/single-list"
+import "@/common/stylus/base.styl"
+export default {
+  name: "home",
+  data(){
+    return {
+      songs:[],
+      sheet:[],
+      sheetTitle:'推荐歌单',
+      newSong:[],
+      newSongTitle:'最新音乐',
+      anchor:[],
+      anchorTitle:"主播电台",
+      singleList:[],
+      swiperList:[],
+      isReload:false,
+      load:false
+    }
+  },
+  created(){
+      this.probeType = 3
+      this.listenScroll = true
+      this.pullup = false
+      this.pulldown = true
+      this.$nextTick(() => {
+        this.$refs.wrapper.refresh();
+        //计算容器高度 兼容浏览器
+        this.$refs.wrapper.$el.style.height = 'calc('+ window.innerHeight +'px - 10vh)'
+      })
+  },
+  mounted(){
+   this.getData()
+  },
+  methods:{
+    getData(){
+      /**
+       * 登录
+       */
+      //this.$http.get('http://localhost:3000/login/cellphone?phone=15627795345&password=1iekkas')
+      /**
+       * 获取推荐歌单
+       */
+      this.$http.get('/api/data')
+        .then((res) => {
+            if( res.data.code == '200' ) {  
+                this.newSong = res.data.playlists;
+            }
+        })
+        .catch((error) => {
+            return false
+        })
+      /**
+       * 获取最新音乐
+       */
+      this.$http.get('/api/data')
+        .then((res) => {
+            if( res.data.code == '200' ) {   
+                this.sheet = res.data.playlists; 
+            }
+        })
+        .catch((error) => {
+            return false
+      })  
+      /**
+       * 获取主播电台
+       */
+      this.$http.get('/api/data')
+        .then((res) => {
+            if( res.data.code == '200' ) {   
+                this.anchor = res.data.playlists; 
+            }
+        })
+        .catch((error) => {
+            return false
+      }) 
+      /**
+       * 获取单曲推荐
+       */
+      this.$http.get('/api/personalized/song')
+        .then((res) => {
+            if( res.data.code == '200' ) {  
+                this.singleList = res.data.playlists;  
+            }
+        })
+        .catch((error) => {
+            return false
+      }) 
+      /**
+       * 获取swiper
+       */
+      this.$http.get('/api/swiper')
+        .then((res) => {
+            if( res.data.code == '200' ) {  
+                this.swiperList = res.data.swiper;  
+            }
+        })
+        .catch((error) => {
+            return false
+      }) 
+    },
+    loadImage() {
+        this.$refs.wrapper.refresh()  
+    },
+    scroll(pos) {
+      this.scrollY = pos.y
+      /* if(this.scrollY > 60) {
+        this.isReload = true
+      }else if(this.isReload) {
+        this.load = true
+         this.$http.get('/api/swiper')
+            .then((res) => {
+                if( res.data.code == '200' ) {  
+                    this.swiperList = res.data.swiper;  
+                }
+            })
+            .catch((error) => {
+                return false
+          }) 
+        setTimeout(() => {
+          //this.getData()
+          this.isReload = false 
+          this.load = false
+        },500)
+      } */
+      if(this.scrollY > 50) {
+        this.isReload = true
+      }else{
+        this.isReload = false
+      }
+
+    },
+    scrollToEnd() {
+  
+      
+    },
+    reload(pos) {
+      this.load = true
+      setTimeout(() => {
+        this.load = false
+      },1000)
+    }
+  },
+  components: {
+    Scroll,
+    Sheet,
+    SingleList,
+    Swiper
+  }
+};
+</script>
+<style lang="stylus" scoped>   
+.wrapper
+  //height 90vh
+  overflow hidden
+  position relative
+.reload
+  width 100vw
+  position fixed
+  top -5vh
+  left 0
+  font-size 12px
+.container
+  padding-bottom 5vh
+ul li 
+  display block 
+.song-item
+  display flex
+  .img
+    width 30vw 
+    img 
+      width 100% 
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}      
+</style>
