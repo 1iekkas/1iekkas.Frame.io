@@ -12,10 +12,7 @@
     >
       <div class="container">
         <transition name="fade">
-          <div class="reload" v-show="isReload" >
-            <span v-if="!load">释放刷新</span>
-            <span v-else><img src="../../../src/base/loading/loading.gif" alt="" width="20"></span>
-          </div>
+          <pull-up-load :flag="load" v-if="isReload"></pull-up-load>
         </transition>
         <swiper :swiperList="swiperList"></swiper>
         <sheet :title="sheetTitle" :data="sheet" @imgload="loadImage"></sheet> 
@@ -46,6 +43,7 @@ import Scroll from "@/base/scroll/scroll"
 import Swiper from "@/base/swiper/swiper"
 import Sheet from "@/components/recommend/sheet"
 import SingleList from "@/components/single-list/single-list"
+import pullUpLoad from "@/base/pullUpLoad/pullUpLoad"
 import "@/common/stylus/base.styl"
 export default {
   name: "home",
@@ -182,6 +180,7 @@ export default {
     },
     reload(pos) {
       this.load = true
+      window.location.reload()
       setTimeout(() => {
         this.load = false
       },1000)
@@ -191,7 +190,8 @@ export default {
     Scroll,
     Sheet,
     SingleList,
-    Swiper
+    Swiper,
+    pullUpLoad
   }
 };
 </script>
@@ -217,9 +217,15 @@ ul li
     img 
       width 100% 
 .fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+  transition: opacity 1s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
-}      
+}  
+.swiper
+  padding 0 2.5vw
+  
+.swiper
+  img 
+     
 </style>

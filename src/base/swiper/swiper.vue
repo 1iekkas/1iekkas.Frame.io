@@ -23,8 +23,14 @@ export default {
 <style lang="stylus" scoped>
 .swiper
   margin-bottom 4vh
+  border-radius 3px
 .swiper
   img 
     display block
+    border-radius 3px  
+.van-swipe-item
+  border-radius 3px  
+.van-swipe
+  border-radius 3px            
 </style>
 
