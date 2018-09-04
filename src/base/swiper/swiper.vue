@@ -1,8 +1,8 @@
 <template>
     <div class="swiper">
       <van-swipe :autoplay="5000">
-        <van-swipe-item v-for="item in swiperList" :key="item">
-            <img width="100%" :src="item" alt="">
+        <van-swipe-item v-for="item in swiperList">
+            <img @load="imgloading" width="100%" :src="item" alt="">
         </van-swipe-item>
       </van-swipe>
     </div>
@@ -15,8 +15,16 @@ export default {
             default:null
         }
     },
+    mounted(){
+      
+    },
     components:{
 
+    },
+    methods:{
+      imgloading(){
+        this.$emit('imgload')
+      }
     }
 }
 </script>

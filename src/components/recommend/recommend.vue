@@ -14,7 +14,7 @@
         <transition name="fade">
           <pull-up-load :flag="load" v-if="isReload"></pull-up-load>
         </transition>
-        <swiper :swiperList="swiperList"></swiper>
+        <swiper :swiperList="swiperList" @imgload="loadImage"></swiper>
         <sheet :title="sheetTitle" :data="sheet" @imgload="loadImage"></sheet> 
         <sheet :title="newSongTitle" :data="newSong" @imgload="loadImage"></sheet>  
         <sheet :title="anchorTitle" :data="anchor" @imgload="loadImage"></sheet> 
@@ -205,6 +205,7 @@ export default {
   position fixed
   top -5vh
   left 0
+  z-index 100 
   font-size 12px
 .container
   padding-bottom 5vh
