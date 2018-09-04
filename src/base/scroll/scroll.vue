@@ -6,7 +6,6 @@
 
 <script type="text/ecmascript-6">
   import BScroll from 'better-scroll'
-
   export default {
     props: {
       probeType: {
@@ -24,6 +23,10 @@
       data: {
         type: Array,
         default: null
+      },
+      scrollX:{
+        type:Boolean,
+        default:false
       },
       pullup: {
         type: Boolean,
@@ -55,6 +58,7 @@
         this.scroll = new BScroll(this.$refs.wrapper, {
           probeType: this.probeType,
           click: this.click ,
+          scrollX:this.scrollX,
           pullUpLoad: {
             threshold: -30 // 当上拉距离超过30px时触发 pullingUp 事件
           },
@@ -88,26 +92,9 @@
             }
           })
         }
-        /* if (this.pullup) {
-          this.scroll.on('scrollEnd', () => {
-            if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
-              this.$emit('scrollToEnd')
-            }
-          })
-        }  
-          
-        */
+        if(this.scrollX) {
 
-        /* if (this.pulldown) {
-          let me = this ;
-          console.log(this.scroll)
-          this.scroll.on('pullUpLoad', (pos) => {
-             console.log(pos)
-          })
-        
-        } */
-        
-
+        }
         if (this.beforeScroll) {
           this.scroll.on('beforeScrollStart', () => {
             this.$emit('beforeScroll')
