@@ -1,112 +1,153 @@
 <template>
-  <scroll class="wrapper"
-    :data="val"
-    :listen-scroll="listenScroll"
-    :probe-type="probeType"
-    @scroll="srcoll"
-    ref="wrapper"
-  >
     <div class="container" ref="scrollContainer"> 
-      <tab-nav :active="current"></tab-nav>
-      <div class="scroll-tab"
-        ref="s"
-        :style="{width:'200%',transform:'translate3d('+ resX +'px,0,0)'}"
-        @touchstart="touchStart($event)"
-        @touchmove="touchMove"
-        @touchend="touchEnd"
-      >
-        <div :style="{width:'100vw',background:'#ccc'}">555555</div>
-        <div :style="{width:'100vw',background:'#000'}">666666</div>
-        <div :style="{width:'100vw',background:'#bbb'}">666666</div>
-      </div>
+      <tab-nav :active="current" :nav="nav" @change="change"></tab-nav>
+        
+          <div class="child">
+            <div class="scroll-tab"
+              ref="s"
+              :style="{width:`${ScrollWidth}px`,transform:'translate3d('+ resX +'px,0,0)'}"
+              @touchstart="touchStart($event)"
+              @touchmove="touchMove($event)"
+              @touchend="touchEnd($event)"
+            >
+              <m-v :mv-data="pageList.mv" :style="{background:'#ccc'}"></m-v> 
+              <scene :mv-data="pageList.scene" :style="{background:'#eee'}"></scene> 
+              <scene :mv-data="pageList.dance" :style="{background:'#ddd'}"></scene> 
+            </div>  
+          </div>  
+        
     </div>    
-  </scroll>
 </template>
 <script>
-import Scroll from "@/base/scroll/scroll"
+
+import MV from "@/components/mv/mv"
+import Scene from "@/components/scene/scene"
 import tabNav from "@/base/scroll-tab/scroll-tab" 
 export default {
-    data(){
-      return {
-        val:[1,2,3,4,5,6,7,8,9,10] , 
-        current:0,
-        startX:0,
-        moveX:0,
-        resX:0,  
-      }
-    },
-    created(){
-      this.listenScroll = true 
-      this.probeType = 3  
-      this.$nextTick(() => {
-        //计算容器高度 兼容浏览器
-        this.$refs.wrapper.$el.style.height = 'calc('+ window.innerHeight +'px - 10vh)'
-        //this.$refs.scrollContainer.style.width = `${ this.val.length * window.innerWidth }px`
-        this.$refs.wrapper.refresh();  
-      })  
+  data(){
+    return {
+      nav:[{
+        index:0,
+        key:'mv',
+        value:'MV'
+      },{
+        index:1,
+        key:'scene',
+        value:'现场'
+      },{
+        index:2,
+        key:'dance',
+        value:'舞蹈'
+      }] ,
+      pageList:{
+        mv:[1,2,3,4,5,6,7,8,9,1,0,1,5,4,5,4,5],
+        scene:[1,2,3,4],
+        dance:[1,2,3,4,5,6,7,8,9,10],
+      } ,
       /**
-       * scroll-x 变量
-      * */  
+       * @ current  当前活动tab
+       * @ startX  起始位置
+       * @ moveX  平移距离
+       * @ scrollX 屏幕滑动距离
+       * @ resX  元素滑动距离
+       * 
+       */
+      current:0,
+      startX:0,
+      moveX:0,
+      srcollX:0,
+      resX:0,  
+      listenData:[],
+    }
+  },
+  created(){
+    this.ScrollWidth = window.innerWidth * 3
+    this.$nextTick(() => {
+      
+      this.$refs.s.style['transition'] = 'move .2s linear'
+    })
+  },
+  computed:{
+      
+  },
+  mounted(){ 
+      
+  },
+  watch:{
+    current(news , old){
+      if(news > 2) {
+        return false
+      }else{
+        this.listenData = []
+        this.resX = - news * window.innerWidth 
 
-    },
-    computed:{
+      }
         
+    }
+  },
+  methods:{
+    //记录开始位置  
+    touchStart(e) {      
+      //e.stopPropagation()
+      this.moveX = 0 
+      this.startX = e.changedTouches[0].pageX 
+  
     },
-    mounted(){ 
-        
-    },
-    methods:{
-      //记录开始位置  
-      touchStart(e) {      
-        e.preventDefault()
-        console.log(e)
-        this.moveX = 0 ; 
-        this.resX = 0 ;
-        //起始位置x
-        this.startX = e.changedTouches[0].pageX ;
-    
-      },
-      //记录滑动距离
-      touchMove(e) {
-        e.preventDefault()
-        this.moveX = e.changedTouches[0].pageX ;
-        this.resX = this.moveX - this.startX
-        console.log(this.resX)
-        if(this.current == 0 && this.resX > 0){
-            this.resX = 0
+    //记录滑动距离
+    touchMove(e) {
+      //e.stopPropagation()
+      this.moveX = e.changedTouches[0].pageX 
+      this.srcollX = this.moveX - this.startX 
+      
+      if(Math.abs(this.srcollX) > 70){
+        console.log('1')
+        if( this.current == 0 ) {
+          if( this.srcollX > 0 ) {
             return false
-        }
-        
-      },
-      //执行滑动
-      touchEnd(e) {
-        e.preventDefault()
-        if(this.resX > 0){
-            console.log('右滑')
+          }else{
+            this.resX = this.srcollX 
+          }
+        }else if(this.current == 2){
+          //console.log(this.srcollX)
+            if( this.srcollX < 0 ) {
+              return false
+            }else{
+              this.resX = -this.current * window.innerWidth + this.srcollX
+            }
         }else{
-            console.log('左滑')
-        }
-
-
-
-      },
-      srcoll(pos) {
-            
-      },
-    },
-    components:{
-      Scroll,
-      tabNav
-    },
-    directives:{
-      focus: {
-        // 指令的定义
-        inserted: function (el) {
-          el.focus()
+          this.resX = -this.current * window.innerWidth + this.srcollX
         }
       }
+      
+      
+      
+    },
+      //执行滑动
+    touchEnd(e) {
+      //e.stopPropagation()
+      if(Math.abs(this.srcollX) > 70){
+         if( this.resX  <  - this.current * window.innerWidth - 150  ) {
+            this.current = this.current + 1 
+            this.resX = - this.current * window.innerWidth
+          }else if( this.resX > - this.current * window.innerWidth + 150){
+            this.current = this.current - 1 
+            this.resX = - this.current * window.innerWidth
+          }else{
+            this.resX = - this.current * window.innerWidth
+          }
+      }
+     
+    },
+    change(index) {
+      this.current = index 
     }
-}
+  },
+  components: {
+    tabNav,
+    MV,
+    Scene
+  }
+};
 </script>
 <style lang="stylus" scoped>
 .wrapper
@@ -118,11 +159,9 @@ export default {
     display inline-block
     width 100vw
 .scroll-tab
-  height 50vh
- 
-  div
+  overflow hidden
+  .child-container
+  .wrapper
     display inline-block
-    width 100vw
-    white-space nowrap    
+    white-space nowrap
 </style>
-

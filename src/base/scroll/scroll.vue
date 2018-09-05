@@ -55,6 +55,13 @@
         if (!this.$refs.wrapper) {
           return
         }
+        if(this.pulldown) {
+          this.pullDownConfig = {
+            threshold: 50, // 下拉距离超过30px触发pullingDown事件
+            stop: 30 // 回弹停留在距离顶部20px的位置
+          }
+        }
+
         this.scroll = new BScroll(this.$refs.wrapper, {
           probeType: this.probeType,
           click: this.click ,
@@ -62,12 +69,8 @@
           pullUpLoad: {
             threshold: -30 // 当上拉距离超过30px时触发 pullingUp 事件
           },
-          pullDownRefresh: {
-            threshold: 50, // 下拉距离超过30px触发pullingDown事件
-            stop: 30 // 回弹停留在距离顶部20px的位置
-          }
+          pullDownRefresh: this.pullDownConfig
         })
-
         if (this.listenScroll) {
           let me = this
           this.scroll.on('scroll', (pos) => {
@@ -87,6 +90,7 @@
             if(pos.y > 50){
               this.$emit('reload')
               setTimeout(() => {
+                console.log('执行')
                 this.scroll.finishPullDown()
               },1000)
             }
@@ -118,7 +122,8 @@
       }
     },
     watch: {
-      data() {
+      data(n,o) {
+        console.log(n,o)
         setTimeout(() => {
           this.refresh()
         }, this.refreshDelay)

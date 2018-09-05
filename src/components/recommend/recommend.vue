@@ -148,25 +148,6 @@ export default {
     },
     scroll(pos) {
       this.scrollY = pos.y
-      /* if(this.scrollY > 60) {
-        this.isReload = true
-      }else if(this.isReload) {
-        this.load = true
-         this.$http.get('/api/swiper')
-            .then((res) => {
-                if( res.data.code == '200' ) {  
-                    this.swiperList = res.data.swiper;  
-                }
-            })
-            .catch((error) => {
-                return false
-          }) 
-        setTimeout(() => {
-          //this.getData()
-          this.isReload = false 
-          this.load = false
-        },500)
-      } */
       if(this.scrollY > 50) {
         this.isReload = true
       }else{
@@ -180,7 +161,7 @@ export default {
     },
     reload(pos) {
       this.load = true
-      window.location.reload()
+      //window.location.reload()
       setTimeout(() => {
         this.load = false
       },1000)

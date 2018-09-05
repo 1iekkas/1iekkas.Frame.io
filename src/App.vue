@@ -29,6 +29,8 @@ p
   font-family 'Avenir', Helvetica, Arial, sans-serif
   text-align center
   color #2c3e50
+  width 100vw
+  overflow hidden
 
 #nav
   padding 30px
