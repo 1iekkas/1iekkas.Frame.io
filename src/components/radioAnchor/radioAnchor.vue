@@ -10,9 +10,9 @@
               @touchmove="touchMove($event)"
               @touchend="touchEnd($event)"
             >
-              <m-v :mv-data="pageList.mv" :style="{background:'#ccc'}"></m-v> 
-              <scene :mv-data="pageList.scene" :style="{background:'#eee'}"></scene> 
-              <scene :mv-data="pageList.dance" :style="{background:'#ddd'}"></scene> 
+              <div v-for="(n,idx) in nav">
+                
+              </div>
             </div>  
           </div>  
         
@@ -40,8 +40,8 @@ export default {
         value:'舞蹈'
       }] ,
       pageList:{
-        mv:[1,2,3,4,5,6,7,8,9,1,0,1,5,4,5,4,5],
-        scene:[1,2,3,4],
+        mv:[1,2,3,4,],
+        scene:[1,2,3,4,5,6,7,8],
         dance:[1,2,3,4,5,6,7,8,9,10],
       } ,
       /**
@@ -63,8 +63,7 @@ export default {
   created(){
     this.ScrollWidth = window.innerWidth * 3
     this.$nextTick(() => {
-      
-      this.$refs.s.style['transition'] = 'move .2s linear'
+      this.$refs.s.style['transition'] = 'all .3s linear '
     })
   },
   computed:{
@@ -159,7 +158,9 @@ export default {
     display inline-block
     width 100vw
 .scroll-tab
+  display flex
   overflow hidden
+  justify-content flex-start
   .child-container
   .wrapper
     display inline-block
