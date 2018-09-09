@@ -68,9 +68,10 @@ export default {
       this.pullup = false
       this.pulldown = true
       this.$nextTick(() => {
-        this.$refs.wrapper.refresh();
+        
         //计算容器高度 兼容浏览器
         this.$refs.wrapper.$el.style.height = 'calc('+ window.innerHeight +'px - 10vh)'
+        this.$refs.wrapper.refresh();
       })
   },
   mounted(){

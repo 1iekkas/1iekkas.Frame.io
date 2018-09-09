@@ -5,7 +5,9 @@ const swiper = [
   'http://p1.music.126.net/blJL8aQsWjuDtCMbj-ifIw==/109951163526119219.jpg',
   'http://p1.music.126.net/C6_Djlp_lmUEGA5ZHjr1Vg==/109951163525665428.jpg',
   'http://p1.music.126.net/GFKjQtcMeHdw-hWqoNfkNQ==/109951163529593867.jpg',
-  'http://p1.music.126.net/nav3AsmqxmF7q-yE38Q8qQ==/109951163527668004.jpg'
+  'http://p1.music.126.net/nav3AsmqxmF7q-yE38Q8qQ==/109951163527668004.jpg',
+  'http://p1.music.126.net/zhthZh4RoM4JzgRe9iORvg==/109951163540855429.jpg',
+  'http://p1.music.126.net/9zkP-doJwB4Zmv3ZPekRuQ==/109951163540860481.jpg',
 ]
 
 const img = [
@@ -97,5 +99,46 @@ Mock.mock('/api/personalized/song',{
 
 Mock.mock('/api/swiper',{
   'code':200,
-  'swiper':swiper,  
+  'swiper|4':[{
+    'swiper|1':swiper
+  }],  
+})
+
+Mock.mock('/api/mv',{
+  'code':200,
+  'playlists|6':[{
+    'name|1':name,
+    'coverImgUrl|1':img,
+    'creator':{
+      'avatarUrl|1':avatarUrl,
+      'nickname|1':nickname,
+      'tag|1':tags
+    }
+    }]  
+})
+
+Mock.mock('/api/scene',{
+  'code':200,
+  'playlists|6':[{
+    'name|1':name,
+    'coverImgUrl|1':img,
+    'creator':{
+      'avatarUrl|1':avatarUrl,
+      'nickname|1':nickname,
+      'tag|1':tags
+    }
+    }]  
+})
+
+Mock.mock('/api/dance',{
+  'code':200,
+  'playlists|6':[{
+    'name|1':name,
+    'coverImgUrl|1':img,
+    'creator':{
+      'avatarUrl|1':avatarUrl,
+      'nickname|1':nickname,
+      'tag|1':tags
+    }
+    }]  
 })
