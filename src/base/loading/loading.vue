@@ -18,7 +18,11 @@
   .loading
     width: 100%
     text-align: center
+    display flex
+    justify-content center
+    align-items center
     .desc
+      margin-left 2vw
       line-height: 20px
       font-size: $font-size-small
       color: $color-text-l

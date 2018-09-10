@@ -7,7 +7,6 @@
           :pulldown="pulldown"
           ref="wrapper"
           @scroll="scroll"
-          @scrollToEnd="scrollToEnd"
           @reload="reload"
     >
       <div class="container">
@@ -156,13 +155,10 @@ export default {
       }
 
     },
-    scrollToEnd() {
-  
-      
-    },
     reload(pos) {
       this.load = true
       //window.location.reload()
+      console.log('这是recommend的reload')
       setTimeout(() => {
         this.load = false
       },1000)

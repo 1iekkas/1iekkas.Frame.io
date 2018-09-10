@@ -100,7 +100,7 @@ Mock.mock('/api/personalized/song',{
 Mock.mock('/api/swiper',{
   'code':200,
   'swiper|4':[{
-    'swiper|1':swiper
+    'name|1':swiper
   }],  
 })
 

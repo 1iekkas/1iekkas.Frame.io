@@ -1,16 +1,16 @@
 <template>
     <div class="container" ref="scrollContainer"> 
-      <tab-nav :active="current" :nav="nav" @change="change"></tab-nav>
+      <tab-nav ref="nav" :active="current" :nav="nav" @change="change"></tab-nav>
         
           <div class="child">
             <div class="scroll-tab"
-              ref="s"
+              ref="SurveyForm"
               :style="{width:`${ScrollWidth}px`,transform:'translate3d('+ resX +'px,0,0)'}"
               @touchstart="touchStart($event)"
               @touchmove="touchMove($event)"
               @touchend="touchEnd($event)"
             >
-              <div v-for="(n , idx) in nav" :key="n.key">
+              <div v-for="(n , idx) in nav" :key="n.value">
                 <m-v v-if="nav[idx].load" :mvData="pageList" :action="action[nav[idx].key]"></m-v>
               </div>
             </div>  
@@ -43,8 +43,28 @@ export default {
         load:false
       },{
         index:2,
-        key:'dance',
+        key:'mv',
         value:'舞蹈',
+        load:false
+      },{
+        index:3,
+        key:'mv',
+        value:'翻唱',
+        load:false
+      },{
+        index:4,
+        key:'mv',
+        value:'ACG',
+        load:false
+      },{
+        index:5,
+        key:'mv',
+        value:'电子',
+        load:false
+      },{
+        index:6,
+        key:'mv',
+        value:'演奏',
         load:false
       }] ,
       action: action ,
@@ -69,9 +89,9 @@ export default {
     }
   },
   created(){
-    this.ScrollWidth = window.innerWidth * 3
+    this.ScrollWidth = window.innerWidth * this.nav.length
     this.$nextTick(() => {
-      this.$refs.s.style['transition'] = 'all .3s linear '
+      this.$refs.SurveyForm.style['transition'] = 'all .3s linear '
     })
   },
   computed:{
@@ -82,12 +102,13 @@ export default {
   },
   watch:{
     current(news , old){
-      if(news > 2) {
+      if(news > this.nav.length) {
         return false
       }else{
         this.listenData = []
         this.resX = - news * window.innerWidth 
         this.nav[news].load = true
+        this.$refs.nav.clickItem(news)
       }
         
     }
@@ -120,7 +141,7 @@ export default {
           }else{
             this.resX = this.srcollX 
           }
-        }else if(this.current == 2){
+        }else if(this.current == this.nav.length - 1){
           //console.log(this.srcollX)
             if( this.srcollX < 0 ) {
               return false
@@ -156,7 +177,6 @@ export default {
     },
     change(index) {
       this.current = index 
-      
     }
   },
   components: {

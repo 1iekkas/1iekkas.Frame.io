@@ -79,10 +79,14 @@
           })
         }
         if (this.pullup) {
-          this.scroll.on('pullupLoad', () => {
-            if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
+          //可用 pullingUp
+          this.scroll.on('pullingUp', () => {
+            
               this.$emit('scrollToEnd')
-            }
+              setTimeout(()=>{
+                this.scroll.finishPullUp()
+              },1000)
+            
           })
         }
         if(this.pulldown){
@@ -90,7 +94,6 @@
             if(pos.y > 50){
               this.$emit('reload')
               setTimeout(() => {
-                console.log('执行')
                 this.scroll.finishPullDown()
               },1000)
             }

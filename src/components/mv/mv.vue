@@ -4,7 +4,9 @@
             :listen-scroll="listenScroll"
             :probe-type="probeType"
             :pulldown = "pulldown"
+            :pullup = "pullup"
             @scroll="scroll"
+            @scrollToEnd="scrollToEnd"
             ref="wrapper"
   >
     <div class="child-container">
@@ -20,7 +22,7 @@
           <div class="author-name"><p>{{item.creator.nickname}}</p></div>
         </div>
       </div> 
-      <loading v-if="show"></loading>   
+      <loading v-show="show"></loading>   
     </div>
   </scroll>      
 </template>
@@ -42,13 +44,14 @@ export default {
   },
   created(){
     this.listenScroll = true 
-    this.pulldown = true
+    this.pulldown = false
+    this.pullup = true
     this.probeType = 3  
     setTimeout(() => {
       this.getData()
         this.$nextTick(() => {
           //计算容器高度 兼容浏览器
-          this.$refs.wrapper.$el.style.height = 'calc('+ window.innerHeight +'px - 15vh)'
+          this.$refs.wrapper.$el.style.height = 'calc('+ window.innerHeight +'px - 16vh)'
           //this.$refs.scrollContainer.style.width = `${ this.val.length * window.innerWidth }px`
           //this.$refs.s.style['transition'] = 'move .2s linear'
           this.$refs.wrapper.refresh();  
@@ -76,7 +79,14 @@ export default {
 
     },
     reload(){
-
+      console.log('reload')
+    },
+    scrollToEnd() {
+      this.show = true
+      setTimeout(()=>{
+        this.$refs.wrapper.refresh();  
+        this.show = false
+      },1000)
     }
   },
   components:{
@@ -87,7 +97,7 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .child-container
-  padding 2.5vw
+  padding 2.5vw 2.5vw 5vh 2.5vw 
   width 95vw
   background white
 .module
@@ -112,6 +122,6 @@ export default {
       border-radius 50%
   .author-name
     margin-left 2vw
-    font-size 14px    
+    font-size 14px      
 </style>
 
