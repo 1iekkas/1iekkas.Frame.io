@@ -34,6 +34,10 @@ export default {
       action: {
         type: String,
         default: '',
+      },
+      srcollBoxHeight: {
+        type: String ,
+        default: ''
       }
   },
   data() {
@@ -51,7 +55,7 @@ export default {
       this.getData()
         this.$nextTick(() => {
           //计算容器高度 兼容浏览器
-          this.$refs.wrapper.$el.style.height = 'calc('+ window.innerHeight +'px - 16vh)'
+          this.$refs.wrapper.$el.style.height = `calc(100vh - 16vh)`
           //this.$refs.scrollContainer.style.width = `${ this.val.length * window.innerWidth }px`
           //this.$refs.s.style['transition'] = 'move .2s linear'
           this.$refs.wrapper.refresh();  
@@ -66,8 +70,7 @@ export default {
       this.$http.get(this.action)
         .then((res) => {
           this.show = false
-            if( res.data.code == '200' ) {  
-              //this.singleList = res.data.playlists;  
+            if( res.data.code == '200' ) {   
               this.mvData = res.data.playlists;  
             }
         })
@@ -75,8 +78,8 @@ export default {
             return false
       }) 
     },
-    scroll(){
-
+    scroll(pos){
+      this.$emit('goTop',pos)
     },
     reload(){
       console.log('reload')

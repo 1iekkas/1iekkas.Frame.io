@@ -136,44 +136,61 @@ export default {
       }  
     },
     y(newY,oldY) {
-      //this.y = 0
-      //console.log(newY,oldY)
+      this.y = 0
+      console.log(newY,oldY)
       //console.log(-137 < newY, newY < 0)
       if(Math.abs(newY) > this.x){
         //如果处于顶部
-        if(this.isTop) {
-          if(oldY !== 0) {
-            //如果顶部下拉
+        if(this.isTop && newY > oldY && -137 < newY ) {
+          console.log('1')
+          this.$refs.box.style['transform'] = `translate3d(0,0,0)`
+          this.$refs.box.style['transition'] = 'all .3s linear '
+          //如果顶部下拉
+          if( newY > oldY && newY > -137 ) {
+            console.log('顶部下拉')
             console.log(newY,oldY)
-            if(newY < 0){
-              //如果在顶部上拉
-              this.$refs.box.style['transform'] = `translate3d(0,-136px,0)`
-              this.$refs.box.style['transition'] = 'all .35s linear '
-            }else {
-              this.$refs.box.style['transform'] = `translate3d(0,0,0)`
-              this.$refs.box.style['transition'] = 'all .35s linear '
-              this.isTop = false
-            }
+            this.$refs.box.style['transform'] = `translate3d(0,0,0)`
+            this.$refs.box.style['transition'] = 'all .3s linear '
+            this.isTop = false
+          }else if( newY < oldY && newY < 0){
+            //如果在底部上拉
+            this.$refs.box.style['transform'] = `translate3d(0,-136px,0)`
+            this.$refs.box.style['transition'] = 'all .3s linear '
+            this.isTop = true
+
           }
 
 
 
 
         }else if(!this.isTop){ //如果在底部
+          console.log('2')
           //如果在底部下拉
-          if(oldY !== 0) {
-            if( newY > oldY ) {
-              console.log('底部下拉')
-              return false
-            //如果在底部上拉
-            }else if( newY < -136){
-              console.log('底部上拉')
-              this.$refs.box.style['transform'] = `translate3d(0,-136px,0)`
-              this.$refs.box.style['transition'] = 'all .35s linear '
-              this.isTop = true
-
+          if( newY > oldY ) {
+            if( newY < -137 ){
+              this.$refs.box.style['transform'] = `translate3d(0,0,0)`
+              this.$refs.box.style['transition'] = 'all .3s linear ' 
+              this.isTop = false 
+            }else{
+              this.$refs.box.style['transform'] = `translate3d(0,0px,0)`
+              this.$refs.box.style['transition'] = 'all .3s linear ' 
+              this.isTop = false
             }
+          }else if( newY < oldY && newY < 0){
+            //如果在底部上拉
+            this.$refs.box.style['transform'] = `translate3d(0,-136px,0)`
+            this.$refs.box.style['transition'] = 'all .3s linear '
+            this.isTop = true
+
+          }else{
+            this.$refs.box.style['transform'] = `translate3d(0,0,0)`
+            this.$refs.box.style['transition'] = 'all .3s linear '
           }
+          
+          
+        }if( newY < oldY){
+          console.log('3')
+          return false
         }
         //this.isTop = !this.isTop
 

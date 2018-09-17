@@ -1,32 +1,23 @@
 <template>
     <div class="container" ref="scrollContainer">
       <!-- <div :style="{height:'24vh'}"></div>  -->
-      <div :style="{height:'24vh'}"></div>
-          <div ref="box">
-            <tab-nav ref="nav" :active="current" :nav="nav" @change="change"></tab-nav>
-            <div class="child">
-              <div class="scroll-tab"
-                ref="SurveyForm"
-                :style="{width:`${ScrollWidth}px`,transform:'translate3d('+ resX +'px,0,0)'}"
-                @touchstart="touchStart($event)"
-                @touchmove="touchMove($event)"
-                @touchend="touchEnd($event)"
-              >
-                <div :style="{width:'100%'}" v-for="(n , idx) in nav" :key="n.value">
-                  <m-v v-if="nav[idx].load" 
-                      :action="action[nav[idx].key]"
-                      @goTop = "goTop"
-                  ></m-v>
-                </div>
-              </div>  
-            </div>   
-          
-          
-          
-          
-          
-          
-          </div> 
+
+          <tab-nav ref="nav" :active="current" :nav="nav" @change="change"></tab-nav>
+          <div class="child">
+            <div class="scroll-tab"
+              ref="SurveyForm"
+              :style="{width:`${ScrollWidth}px`,transform:'translate3d('+ resX +'px,0,0)'}"
+              @touchstart="touchStart($event)"
+              @touchmove="touchMove($event)"
+              @touchend="touchEnd($event)"
+            >
+              <div :style="{width:'100%'}" v-for="(n , idx) in nav" :key="n.value">
+                <m-v v-if="nav[idx].load" 
+                :action="action[nav[idx].key]"
+                ></m-v>
+              </div>
+            </div>  
+          </div>  
   
         
     </div>    
@@ -100,9 +91,6 @@ export default {
       resX:0,  
       listenData:[],
       /** */
-      isTop:false ,
-      y:0,
-      x:0,
     }
   },
   created(){
@@ -119,73 +107,18 @@ export default {
   },
   watch:{
     current(news , old){
-      /* if(news !== 0){
-          this.isTop = true 
-          this.$refs.box.style['transform'] = `translate3d(0,-136px,0)`
-          this.$refs.box.style['transition'] = 'all .3s linear '
-      } */
-      
       if(news > this.nav.length) {
         return false
       }else{
-        
         this.listenData = []
         this.resX = - news * window.innerWidth 
         this.nav[news].load = true
         this.$refs.nav.clickItem(news)
       }  
     },
-    y(newY,oldY) {
-      //this.y = 0
-      //console.log(newY,oldY)
-      //console.log(-137 < newY, newY < 0)
-      if(Math.abs(newY) > this.x){
-        //如果处于顶部
-        if(this.isTop) {
-          if(oldY !== 0) {
-            //如果顶部下拉
-            console.log(newY,oldY)
-            if(newY < 0){
-              //如果在顶部上拉
-              this.$refs.box.style['transform'] = `translate3d(0,-136px,0)`
-              this.$refs.box.style['transition'] = 'all .35s linear '
-            }else {
-              this.$refs.box.style['transform'] = `translate3d(0,0,0)`
-              this.$refs.box.style['transition'] = 'all .35s linear '
-              this.isTop = false
-            }
-          }
-
-
-
-
-        }else if(!this.isTop){ //如果在底部
-          //如果在底部下拉
-          if(oldY !== 0) {
-            if( newY > oldY ) {
-              console.log('底部下拉')
-              return false
-            //如果在底部上拉
-            }else if( newY < -136){
-              console.log('底部上拉')
-              this.$refs.box.style['transform'] = `translate3d(0,-136px,0)`
-              this.$refs.box.style['transition'] = 'all .35s linear '
-              this.isTop = true
-
-            }
-          }
-        }
-        //this.isTop = !this.isTop
-
-      }
-    }
   },
   methods:{
-    goTop(pos) {
-      //console.log(pos)
-      this.y = pos.y
-      this.x = pos.x
-    },
+
     //记录开始位置  
     touchStart(e) {      
       //e.stopPropagation()
